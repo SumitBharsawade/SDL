@@ -22,7 +22,7 @@ class Product implements Comparable,Serializable {
 
    BitSet properties=new BitSet(3);  //1.bit=HasDiscount 2.bit=Ispopular 3.isReplacable
 
-   Scanner sc=new Scanner(System.in);
+  transient Scanner sc=new Scanner(System.in);
 
 
 

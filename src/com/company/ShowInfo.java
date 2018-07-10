@@ -7,9 +7,9 @@ public class ShowInfo {
     Vector<Product> v;
     Scanner sc=new Scanner(System.in);
 
-    Stack<Product> buyStack = new Stack<Product>();
-    Stack<Product> tempStack = new Stack<Product>();
-    TreeSet<Product> tset = new TreeSet<Product>();
+    Stack<Product> buyStack = new Stack<>();
+    Stack<Product> tempStack = new Stack<>();
+    TreeSet<Product> tset = new TreeSet<>();
 
     public void getProducts()
     {
@@ -41,7 +41,7 @@ public class ShowInfo {
         System.out.println("**************Avilable Products Information***********");
         for(Object temp:v)
         {
-            temp=(Product)temp;
+            //temp=(Product)temp;
 
             ((Product) temp).ShowProductInfo();
 

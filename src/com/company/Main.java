@@ -10,11 +10,12 @@ import java.util.Vector;
 
 public class Main {
 
+    @SuppressWarnings("unchecked")
     public static void main(String[] args)throws Exception {
 
         ShowInfo E1=new ShowInfo();
         Scanner cin=new Scanner(System.in);
-        Socket s=new Socket("localhost",3344);
+        Socket s=new Socket("localhost",3355);
 
         System.out.println("--->>connection establish");
         DataInputStream is=new DataInputStream(s.getInputStream());
@@ -26,6 +27,7 @@ public class Main {
        if(length==0)
        {
            System.out.println("null data accepted");
+           System.exit(0);
        }
 
         File file = new File("C:\\Users\\hp\\Desktop\\abc2.txt");
@@ -35,9 +37,17 @@ public class Main {
 
         FileInputStream fis=new FileInputStream("C:\\Users\\hp\\Desktop\\abc2.txt");
         ObjectInputStream fout=new ObjectInputStream(fis);  //file output object
-       E1.v=(Vector<Product>) fout.readObject();
 
+        int count=1;
+        //Vector<Product>temp=new Vector<>();
+//     while(E1.v.add((Product) fout.readObject()));
 
+try {
+    E1.v = (Vector<Product>) fout.readObject();
+}catch (Exception e)
+{
+    e.printStackTrace();
+}
       // E1.v=(Vector)din.readObject();
         System.out.println("--->>Vector accepted");
 
