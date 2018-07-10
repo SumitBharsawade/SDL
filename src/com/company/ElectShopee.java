@@ -1,15 +1,22 @@
 package com.company;
 
+//import java.io.BufferedReader;
+//import java.io.DataInputStream;
+//import java.io.DataOutputStream;
+//import java.io.InputStreamReader;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.*;
+import java.io.*;
 
-class ElectShopee {
+class ElectShopee implements Serializable {
 
-    Vector v=new Vector();
+    Vector<Product> v=new Vector();
     Scanner sc=new Scanner(System.in);
     
     Stack<Product> buyStack = new Stack<Product>();
     Stack<Product> tempStack = new Stack<Product>();
-    Set<Product> tset = new TreeSet<Product>();
+    TreeSet<Product> tset = new TreeSet<Product>();
 
     public void AddProduct()
     {
@@ -42,7 +49,7 @@ class ElectShopee {
     	Product temp;
     	
         System.out.println("**************Avilable Products***********");
-      /**  for(Object temp:v)
+      /* for(Object temp:v)
         {
             temp=(Product)temp;
 
@@ -175,6 +182,38 @@ class ElectShopee {
         	}
 	
 	}
+
+	public void ServerOn()throws Exception
+    {
+        ServerSocket ss=new ServerSocket(3344);
+        Socket s=ss.accept();
+        System.out.println("--->>Connection Establish");
+        DataOutputStream os=new DataOutputStream(s.getOutputStream());
+        //ObjectInputStream din=new ObjectInputStream(s.getInputStream());
+        //ObjectOutputStream dout=new ObjectOutputStream(os);
+
+
+        //Writing Vector data to file
+        FileOutputStream ft=new FileOutputStream("C:\\Users\\hp\\Desktop\\abc.txt");
+        ObjectOutputStream fout=new ObjectOutputStream(ft);  //file output object
+        fout.writeObject(v);
+        fout.flush();
+
+        //Code for convert file data to byte
+        File file = new File("C:\\Users\\hp\\Desktop\\abc.txt");
+        FileInputStream fis=new FileInputStream(file);
+
+        byte[] bytes = new byte[(int)file.length()];
+
+        fis.read(bytes);
+
+        os.write(bytes);
+        os.flush();
+        System.out.println("readCompleted");
+        s.close();
+        ss.close();
+
+    }
 
 
 }

@@ -1,12 +1,13 @@
 package com.company;
 
 
+import java.io.Serializable;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.Scanner;
 
-class Product implements Comparable {
+class Product implements Comparable,Serializable {
 
 
    String name;

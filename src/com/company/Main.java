@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args)throws Exception {
 
         ElectShopee E1=new ElectShopee();
         Scanner cin=new Scanner(System.in);
@@ -16,7 +16,7 @@ public class Main {
             System.out.println("\n-------------------------------------");
             System.out.println("--->>Enter option as follows :");
 
-            System.out.print("1.Add Product\n2.Show Product\n3.Show product Info\n4.Buy\n5.UnavilableProducts\n6.exit\n--->>>");
+            System.out.print("1.Add Product\n2.Show Product\n3.Show product Info\n4.Buy\n5.UnavilableProducts\n6.On Server\n7.exit\n--->>>");
             int ch=cin.nextInt();
 
             System.out.println("\n-------------------------------------");
@@ -63,8 +63,14 @@ public class Main {
                     break;
                     
                 case 6:
+                    E1.ServerOn();
+                    break;
 
+                case 7:
                     System.exit(0);
+                    break;
+                default:
+                    System.out.print("\nChoice Not Found \n     try again.....");
 
             }
 
