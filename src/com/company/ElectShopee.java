@@ -185,7 +185,7 @@ class ElectShopee implements Serializable {
 
 	public void ServerOn()throws Exception
     {
-        ServerSocket ss=new ServerSocket(3344);
+        ServerSocket ss=new ServerSocket(3355);
         Socket s=ss.accept();
         System.out.println("--->>Connection Establish");
         DataOutputStream os=new DataOutputStream(s.getOutputStream());
@@ -196,9 +196,14 @@ class ElectShopee implements Serializable {
         //Writing Vector data to file
         FileOutputStream ft=new FileOutputStream("C:\\Users\\hp\\Desktop\\abc.txt");
         ObjectOutputStream fout=new ObjectOutputStream(ft);  //file output object
+
+        /*for(Product temp:v) {
+
+            fout.writeObject(temp);
+            fout.flush();
+        }*/
         fout.writeObject(v);
         fout.flush();
-
         //Code for convert file data to byte
         File file = new File("C:\\Users\\hp\\Desktop\\abc.txt");
         FileInputStream fis=new FileInputStream(file);
