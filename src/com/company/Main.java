@@ -19,6 +19,8 @@ public class Main {
 
         System.out.println("--->>connection establish");
         DataInputStream is=new DataInputStream(s.getInputStream());
+        DataOutputStream os=new DataOutputStream(s.getOutputStream());
+
         //ObjectInputStream din=new ObjectInputStream(is);
 
         byte []bytes=new byte[1024*4];
@@ -76,10 +78,12 @@ try {
                     break;
 
                 case 3:
-                    while(true)
+                  /*  while(true)
                     {
 
                        // E1.Buy();
+                        System.out.print("\nWant to Buy Another (yes or no) :");
+
 
                         System.out.print("\nWant to Buy Another (yes or no) :");
                         String choice=cin.next();
@@ -91,8 +95,39 @@ try {
                             break;
                         }
 
-                    }
-                    break;
+                    }*/
+                    String choice="no";
+                  do {
+                      System.out.println("**************Buying Product***********");
+                      System.out.print("\nEnter Product Name  :");
+                      String name=cin.next();
+
+                      System.out.print("\nEnter Model Number :");
+                      String num=cin.next();
+
+                      os.writeUTF(name);
+                      os.writeUTF(num);
+
+                      int msg=is.readInt();
+                      if(msg==1)
+                      {
+                          System.out.println("\nItem added to your cart");
+                          E1.Buy(name,num);
+                      }
+                      else if (msg==0)
+                      {
+                          System.out.println("\nProduct is out of Stock");
+                      }
+                      else if(msg==-1)
+                      {
+                          System.out.println("\nProduct not found \n -----please Enter correct product!---");
+                      }
+                      System.out.print("\nWant to Buy Another (yes or no) :");
+                       choice=cin.next();
+                  }while(choice.compareToIgnoreCase("yes")==0);
+                  os.writeUTF("complete");
+                  E1.buy1();
+                   // break;
 
                 case 4:
                     s.close();

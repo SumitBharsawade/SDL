@@ -8,8 +8,8 @@ public class ShowInfo {
     Scanner sc=new Scanner(System.in);
 
     Stack<Product> buyStack = new Stack<>();
-    Stack<Product> tempStack = new Stack<>();
-    TreeSet<Product> tset = new TreeSet<>();
+    //Stack<Product> tempStack = new Stack<>();
+
 
     public void getProducts()
     {
@@ -47,4 +47,57 @@ public class ShowInfo {
 
         }
     }
+
+
+    public void Buy(String name,String num)
+    {
+
+        for(Object temp:v)
+        {
+
+            if(name.compareToIgnoreCase(((Product) temp).getName())==0&&num.compareToIgnoreCase(((Product) temp).getMnumber())==0)
+            {
+
+                buyStack.push((Product) temp);
+
+            }
+
+        }
+
+
+    }
+
+    public void buy1()
+    {
+        Product p;
+        Double totalPrice=0.0;
+
+        try
+        {
+
+            while(true)
+            {
+                p=buyStack.pop();
+               // tempStack.push(p);
+                p.ShowProductInfo();
+
+                totalPrice+=p.getPrice();
+
+            }
+
+        }
+        catch(EmptyStackException e)
+        {
+
+        }
+
+        System.out.println("\n Total Price :"+totalPrice);
+
+        //System.out.print("\n Conform to Buying (yes or no):");
+
+
+        System.out.println("\nThank you........");
+
+    }
+
 }
