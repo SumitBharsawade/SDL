@@ -92,12 +92,12 @@ class Product implements Comparable,Serializable {
 
        if(properties.get(0))
        {
-           System.out.println("Product Have Discount:");
+           System.out.println(" Product Have Discount:");
 
        }
        else
        {
-           System.out.println("Product Not Have Discount:");
+           System.out.println(" Product Not Have Discount:");
        }
 
 
@@ -170,7 +170,7 @@ class Product implements Comparable,Serializable {
 
        getProperties();
        getBproperties();
-       System.out.println("\n---------------------------------------");
+
 
    }
 

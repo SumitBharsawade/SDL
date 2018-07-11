@@ -76,7 +76,8 @@ class ElectShopee implements Serializable {
             temp=(Product)temp;
 
             ((Product) temp).ShowProductInfo();
-
+           System.out.println ("\n Quantity="+((Product) temp).getQuantity());
+            System.out.println("\n---------------------------------------");
         }
     }
 
@@ -182,26 +183,44 @@ class ElectShopee implements Serializable {
         	}
 	
 	}
+public int clientBuy(String name,String num)
+{
+    for(Object temp:v) {
+        //temp=(Product)temp;
 
+        if (name.compareToIgnoreCase(((Product) temp).getName()) == 0 && num.compareToIgnoreCase(((Product) temp).getMnumber()) == 0) {
+            if (!(((Product) temp).getQuantity() > 0)) {
+                // System.out.println("\nCurrently Product is out of stock:");
+
+                return 0;
+            }
+            else{
+                ((Product) temp).decQuantity();
+                if(!(((((Product) temp).getQuantity())>0)))
+                {
+                    tset.add((Product)temp);
+                }
+                return 1;
+            }
+        }
+
+    }
+    return  -1;
+}
 	public void ServerOn()throws Exception
     {
         ServerSocket ss=new ServerSocket(3355);
         Socket s=ss.accept();
         System.out.println("--->>Connection Establish");
         DataOutputStream os=new DataOutputStream(s.getOutputStream());
-        //ObjectInputStream din=new ObjectInputStream(s.getInputStream());
-        //ObjectOutputStream dout=new ObjectOutputStream(os);
+        DataInputStream is=new DataInputStream(s.getInputStream());
+
 
 
         //Writing Vector data to file
         FileOutputStream ft=new FileOutputStream("C:\\Users\\hp\\Desktop\\abc.txt");
         ObjectOutputStream fout=new ObjectOutputStream(ft);  //file output object
 
-        /*for(Product temp:v) {
-
-            fout.writeObject(temp);
-            fout.flush();
-        }*/
         fout.writeObject(v);
         fout.flush();
         //Code for convert file data to byte
@@ -215,7 +234,19 @@ class ElectShopee implements Serializable {
         os.write(bytes);
         os.flush();
         System.out.println("readCompleted");
-        s.close();
+
+        String name;
+        String num;
+        name =is.readUTF();
+
+        do{
+            num =is.readUTF();
+           // int result=clientBuy(name,num);
+            os.writeInt(clientBuy(name,num));
+            name =is.readUTF();
+
+        }while(!(name.compareToIgnoreCase("complete")==0));
+         s.close();
         ss.close();
 
     }
