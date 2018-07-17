@@ -63,7 +63,9 @@ public class Main {
                     break;
                     
                 case 6:
-                    E1.ServerOn();
+                   // E1.ServerOn();
+                    ConnectingThread obj=new ConnectingThread(E1);
+                    obj.start();
                     break;
 
                 case 7:

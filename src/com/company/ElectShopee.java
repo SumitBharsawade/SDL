@@ -11,7 +11,7 @@ import java.io.*;
 
 class ElectShopee implements Serializable {
 
-    Vector<Product> v=new Vector();
+    public Vector<Product> v=new Vector();
     Scanner sc=new Scanner(System.in);
     
     Stack<Product> buyStack = new Stack<Product>();
