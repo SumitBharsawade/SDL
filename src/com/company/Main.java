@@ -15,7 +15,7 @@ public class Main {
 
         ShowInfo E1=new ShowInfo();
         Scanner cin=new Scanner(System.in);
-        Socket s=new Socket("localhost",3355);
+        Socket s=new Socket("localhost",2020);
 
         System.out.println("--->>connection establish");
         DataInputStream is=new DataInputStream(s.getInputStream());
