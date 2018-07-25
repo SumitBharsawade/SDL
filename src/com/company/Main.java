@@ -1,8 +1,5 @@
 package com.company;
 
-
-import com.sun.security.ntlm.Server;
-
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
@@ -15,7 +12,7 @@ public class Main {
 
         ShowInfo E1=new ShowInfo();
         Scanner cin=new Scanner(System.in);
-        Socket s=new Socket("localhost",2020);
+        Socket s=new Socket("localhost",2022);
 
         System.out.println("--->>connection establish");
         DataInputStream is=new DataInputStream(s.getInputStream());
@@ -23,7 +20,7 @@ public class Main {
 
         //ObjectInputStream din=new ObjectInputStream(is);
 
-        byte []bytes=new byte[1024*4];
+        byte []bytes=new byte[1024*5];
        int length=is.read(bytes);
 
        if(length==0)
@@ -32,17 +29,14 @@ public class Main {
            System.exit(0);
        }
 
-        File file = new File("C:\\Users\\hp\\Desktop\\abc2.txt");
+        File file = new File("abc.txt");
         FileOutputStream fos=new FileOutputStream(file);
         fos.write(bytes,0,length);
 
 
-        FileInputStream fis=new FileInputStream("C:\\Users\\hp\\Desktop\\abc2.txt");
+        FileInputStream fis=new FileInputStream(file);
         ObjectInputStream fout=new ObjectInputStream(fis);  //file output object
 
-        int count=1;
-        //Vector<Product>temp=new Vector<>();
-//     while(E1.v.add((Product) fout.readObject()));
 
 try {
     E1.v = (Vector<Product>) fout.readObject();
@@ -50,8 +44,8 @@ try {
 {
     e.printStackTrace();
 }
-      // E1.v=(Vector)din.readObject();
-        System.out.println("--->>Vector accepted");
+
+        //System.out.println("--->>Vector accepted");
 
         while(true)
         {
@@ -78,56 +72,8 @@ try {
                     break;
 
                 case 3:
-                  /*  while(true)
-                    {
 
-                       // E1.Buy();
-                        System.out.print("\nWant to Buy Another (yes or no) :");
-
-
-                        System.out.print("\nWant to Buy Another (yes or no) :");
-                        String choice=cin.next();
-
-                        if(choice.compareToIgnoreCase("no")==0)
-                        {
-                            //E1.buy1();
-
-                            break;
-                        }
-
-                    }*/
-                    String choice="no";
-                  do {
-                      System.out.println("**************Buying Product***********");
-                      System.out.print("\nEnter Product Name  :");
-                      String name=cin.next();
-
-                      System.out.print("\nEnter Model Number :");
-                      String num=cin.next();
-
-                      os.writeUTF(name);
-                      os.writeUTF(num);
-
-                      int msg=is.readInt();
-                      if(msg==1)
-                      {
-                          System.out.println("\nItem added to your cart");
-                          E1.Buy(name,num);
-                      }
-                      else if (msg==0)
-                      {
-                          System.out.println("\nProduct is out of Stock");
-                      }
-                      else if(msg==-1)
-                      {
-                          System.out.println("\nProduct not found \n -----please Enter correct product!---");
-                      }
-                      System.out.print("\nWant to Buy Another (yes or no) :");
-                       choice=cin.next();
-                  }while(choice.compareToIgnoreCase("yes")==0);
-                  os.writeUTF("complete");
-                  E1.buy1();
-                   // break;
+                    E1.Buy(is,os);
 
                 case 4:
                     s.close();
