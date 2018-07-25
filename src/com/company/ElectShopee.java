@@ -1,254 +1,187 @@
 package com.company;
-
-//import java.io.BufferedReader;
-//import java.io.DataInputStream;
-//import java.io.DataOutputStream;
-//import java.io.InputStreamReader;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.sql.*;
 import java.util.*;
 import java.io.*;
 
 class ElectShopee implements Serializable {
 
-    public Vector<Product> v=new Vector();
+    private  Connection con;
     Scanner sc=new Scanner(System.in);
-    
-    Stack<Product> buyStack = new Stack<Product>();
-    Stack<Product> tempStack = new Stack<Product>();
-    TreeSet<Product> tset = new TreeSet<Product>();
 
-    public void AddProduct()
+
+    ElectShopee()
     {
+          String url="jdbc:mysql://localhost:3306/ElectShopee?useSSL=false";
+         String user="root";
+         String password="root";
 
+        try {
+
+            Class.forName("com.mysql.cj.jdbc.Driver");
+             con=DriverManager.getConnection(url,user,password);
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(" Database Connected Successfully");
+    }
+
+    void AddProduct1()
+    {
         System.out.print("\nEnter Product Name :");
         String n=sc.next();
 
         System.out.print("\nEnter Model Number :");
         String num=sc.next();
 
-        System.out.print("\nEnter Product Price :");
+        System.out.print("\nEnter Product Company name:");
+        String company=sc.next();
+
+
+        System.out.print("\nEnter Product Colour :");
+        String colour=sc.next();
+
+        System.out.print("\nEnter Product Weight in kg:");
+        String weight=sc.next();
+
+        System.out.print("\nEnter Product Size:");
+        String size=sc.next();
+
+
+        System.out.print("\nEnter Product Price in Rupees:");
         Double pr=sc.nextDouble();
 
         System.out.print("\nEnter Product Quantity :");
         int quantity=sc.nextInt();
 
 
-        Product p=new Product(n,num,pr,quantity);
-        p.setProperties();
-
-        p.setBproperties();
+        //inserting into database
+        try {
 
 
-        v.add(p);
-    }
+            PreparedStatement pstmt=con.prepareStatement("insert into Products values(?,?,?,?,?,?,?,?)");
+            pstmt.setString(1,n.trim());
+            pstmt.setString(2,num.trim());
+            pstmt.setString(3,company.trim());
+            pstmt.setString(4,colour.trim());
+            pstmt.setString(5,weight.trim());
+            pstmt.setString(6,size.trim());
+            pstmt.setDouble(7,pr);
+            pstmt.setInt(8,quantity);
 
-    public void getProducts()
-    {
-    	ListIterator litr = v.listIterator() ;
-    	Product temp;
-    	
-        System.out.println("**************Avilable Products***********");
-      /* for(Object temp:v)
-        {
-            temp=(Product)temp;
+           boolean i= pstmt.execute();
+           if(i)
+           {
 
-            System.out.println( ((Product) temp).getName());
+               System.out.println("\n Product not Inserted try Again");
+           }
+           else
+               System.out.println("\n Product Inserted Successfully");
 
-        }*/
-        
-        while(litr.hasNext())
-        {
-        	temp=(Product)litr.next();
-        	System.out.println(temp.getName());
-        	
-        }
-        System.out.println("\n---------------------------------------");
-    }
-
-    public void getProductWithInfo()
-    {
-
-
-        System.out.println("**************Avilable Products Information***********");
-        for(Object temp:v)
-        {
-            temp=(Product)temp;
-
-            ((Product) temp).ShowProductInfo();
-           System.out.println ("\n Quantity="+((Product) temp).getQuantity());
-            System.out.println("\n---------------------------------------");
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
 
-    public void Buy()
+
+    void getProducts1()
     {
-        boolean flag=true;
+        Statement stmt= null;
+        try {
+            stmt = con.createStatement();
+            ResultSet rs=stmt.executeQuery("select name,model_name from Products");
+            System.out.println("\n--------All products (Model number--------)");
+            while(rs.next())
+                System.out.println(rs.getString(1)+"("+rs.getString(2)+")");
 
-        System.out.println("**************Buying Product***********");
-        System.out.print("\nEnter Product Name  :");
-        String name=sc.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-        System.out.print("\nEnter Model Number :");
-        String num=sc.next();
+    }
 
-        for(Object temp:v)
+
+        void getProductWithInfo1()
         {
-            //temp=(Product)temp;
+            Statement stmt= null;
+            try {
+                stmt = con.createStatement();
+                ResultSet rs=stmt.executeQuery("select * from Products");
+                System.out.println("*****************************************");
+                while(rs.next()) {
 
-            if(name.compareToIgnoreCase(((Product) temp).getName())==0&&num.compareToIgnoreCase(((Product) temp).getMnumber())==0)
+                    System.out.println("Name :"+rs.getString(1));
+                    System.out.println("Model Name :"+rs.getString(2));
+                    System.out.println("Company Name :"+rs.getString(3));
+                    System.out.println("Colour :"+rs.getString(4));
+                    System.out.println("Weight :"+rs.getString(5));
+                    System.out.println("Size :"+rs.getString(6));
+                    System.out.println("Price :"+rs.getDouble(7));
+                    System.out.println("Quantity:"+rs.getInt(8));
+                    System.out.println("----------------------------------------");
+                }
+                System.out.println("*****************************************");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+
+    void unProduct1()
+    {
+        Statement stmt= null;
+        try {
+            stmt = con.createStatement();
+            ResultSet rs=stmt.executeQuery("select name,model_name from Products where quantity=0");
+
+            if(!rs.next())
             {
-                if(!(((Product) temp).getQuantity()>0))
-                {
-                    System.out.println("\nCurrently Product is out of stock:");
-
-
-                }
-
-
-                buyStack.push((Product) temp);
-                if(!(((((Product) temp).getQuantity()-1)>0)))
-                {
-                    tset.add((Product)temp);
-                }
-
-                flag=false;
-
-
+                System.out.println("\nCurrently noting in Unavilable Product");
+                return;
             }
+            System.out.println("\n--------Unavilable Products--------");
+            while(rs.next())
+                System.out.println(rs.getString(1)+"("+rs.getString(2)+")");
 
-
-        }
-        if(flag)
-        {
-            System.out.println("\n Product not Found !!!!\n please Enter Valid Information ");
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
     }
 
-    public void buy1()
+    Connection getConnection()
     {
-        Product p;
-        Double totalPrice=0.0;
-
-        try
-        {
-
-            while(true)
-            {
-                p=buyStack.pop();
-                tempStack.push(p);
-                p.ShowProductInfo();
-
-                p.decQuantity();
-
-
-                totalPrice+=p.getPrice();
-
-            }
-
-        }
-        catch(EmptyStackException e)
-        {
-
-        }
-
-        System.out.println("\n Total Price :"+totalPrice);
-
-        //System.out.print("\n Conform to Buying (yes or no):");
-
-
-        System.out.println("\nThank you........");
-
+        return con;
     }
 
-	public void unProduct()
-	{
-		 System.out.println("\n-------------Product which Currently not avilable-----------");
-		 
-		Iterator litr = tset.iterator();
-    		Product temp;
-    		
-    		if(!(litr.hasNext()))
-    		{
-    		 	System.out.println("\nCurrently nothing in Unavilable Product. ");
-    		}
-    		
-		while(litr.hasNext())
-        	{
-        		temp=(Product)litr.next();
-        		System.out.println(temp.getName());
-        	
-        	}
-	
-	}
-public int clientBuy(String name,String num)
-{
-    for(Object temp:v) {
-        //temp=(Product)temp;
+    public int clientBuy(String name, String num) {
 
-        if (name.compareToIgnoreCase(((Product) temp).getName()) == 0 && num.compareToIgnoreCase(((Product) temp).getMnumber()) == 0) {
-            if (!(((Product) temp).getQuantity() > 0)) {
-                // System.out.println("\nCurrently Product is out of stock:");
-
-                return 0;
-            }
-            else{
-                ((Product) temp).decQuantity();
-                if(!(((((Product) temp).getQuantity())>0)))
+        Statement stmt= null;
+        try {
+            stmt = con.createStatement();
+            ResultSet rs=stmt.executeQuery("select name,model_name,quantity from Products");
+            while(rs.next())
+                if(rs.getString(1).compareToIgnoreCase(name)==0&&rs.getString(2).compareToIgnoreCase(num)==0)
                 {
-                    tset.add((Product)temp);
+                    if(rs.getInt(3)>0)
+                    {
+                        String query="UPDATE Products SET quantity = quantity-1 WHERE name=\""+name+"\"AND model_name=\""+num+"\"";
+                        stmt.execute(query.trim());
+                        return 1;
+                    }
+                    else
+                        return 0;
                 }
-                return 1;
-            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-
-    }
-    return  -1;
-}
-	public void ServerOn()throws Exception
-    {
-        ServerSocket ss=new ServerSocket(3355);
-        Socket s=ss.accept();
-        System.out.println("--->>Connection Establish");
-        DataOutputStream os=new DataOutputStream(s.getOutputStream());
-        DataInputStream is=new DataInputStream(s.getInputStream());
-
-
-
-        //Writing Vector data to file
-        FileOutputStream ft=new FileOutputStream("C:\\Users\\hp\\Desktop\\abc.txt");
-        ObjectOutputStream fout=new ObjectOutputStream(ft);  //file output object
-
-        fout.writeObject(v);
-        fout.flush();
-        //Code for convert file data to byte
-        File file = new File("C:\\Users\\hp\\Desktop\\abc.txt");
-        FileInputStream fis=new FileInputStream(file);
-
-        byte[] bytes = new byte[(int)file.length()];
-
-        fis.read(bytes);
-
-        os.write(bytes);
-        os.flush();
-        System.out.println("readCompleted");
-
-        String name;
-        String num;
-        name =is.readUTF();
-
-        do{
-            num =is.readUTF();
-           // int result=clientBuy(name,num);
-            os.writeInt(clientBuy(name,num));
-            name =is.readUTF();
-
-        }while(!(name.compareToIgnoreCase("complete")==0));
-         s.close();
-        ss.close();
-
+        return 1;
     }
 
 

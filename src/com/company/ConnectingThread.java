@@ -3,17 +3,19 @@ package com.company;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Vector;
+
 
 public class ConnectingThread extends Thread {
 
-        ElectShopee eobj;
+    ElectShopee eobj;
     ServerSocket ss= null;
+
+
         public ConnectingThread(ElectShopee eobj)
         {
             this.eobj=eobj;
             try {
-                ss = new ServerSocket(2020);
+                ss = new ServerSocket(2022);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -22,7 +24,6 @@ public class ConnectingThread extends Thread {
     @Override
     public  void run()
     {
-
 
         while(true)
         {

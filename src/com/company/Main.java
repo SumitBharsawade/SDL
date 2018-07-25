@@ -5,18 +5,19 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args)throws Exception {
+    public static void main(String[] args) {
 
         ElectShopee E1=new ElectShopee();
         Scanner cin=new Scanner(System.in);
-
-
+        ConnectingThread obj=new ConnectingThread(E1);
+        obj.start();
+        System.out.println(" Server  Started ");
         while(true)
         {
             System.out.println("\n-------------------------------------");
             System.out.println("--->>Enter option as follows :");
 
-            System.out.print("1.Add Product\n2.Show Product\n3.Show product Info\n4.Buy\n5.UnavilableProducts\n6.On Server\n7.exit\n--->>>");
+            System.out.print("1.Add Product\n2.Show Product\n3.Show product Info\n4.UnavilableProducts\n5.exit\n--->>>");
             int ch=cin.nextInt();
 
             System.out.println("\n-------------------------------------");
@@ -25,50 +26,26 @@ public class Main {
             {
 
                 case 1:
-                    E1.AddProduct();
+                    E1.AddProduct1();
                     break;
 
                 case 2:
-                    E1.getProducts();
+                    E1.getProducts1();
 
                     break;
 
                 case 3:
-                    E1.getProductWithInfo();
+                    E1.getProductWithInfo1();
 
                     break;
 
-                case 4:
-                    while(true)
-                    {
-
-                        E1.Buy();
-
-                        System.out.print("\nWant to Buy Another (yes or no) :");
-                        String choice=cin.next();
-
-                        if(choice.compareToIgnoreCase("no")==0)
-                        {
-                            E1.buy1();
-
-                            break;
-                        }
-
-                    }
+                    
+                    case 4:
+                    
+                    E1.unProduct1();
                     break;
                     
-                    case 5:
-                    
-                    E1.unProduct();
-                    break;
-                    
-                case 6:
-                   // E1.ServerOn();
-                    ConnectingThread obj=new ConnectingThread(E1);
-                    obj.start();
-                    break;
-
-                case 7:
+                case 5:
                     System.exit(0);
                     break;
                 default:
