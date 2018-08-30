@@ -1,5 +1,7 @@
 package com.company;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
@@ -17,37 +19,23 @@ public class Main {
         System.out.println("--->>connection establish");
         DataInputStream is=new DataInputStream(s.getInputStream());
         DataOutputStream os=new DataOutputStream(s.getOutputStream());
+        ObjectInputStream ois=new ObjectInputStream(s.getInputStream());
 
-        //ObjectInputStream din=new ObjectInputStream(is);
+         E1.v=(Vector<Product>) ois.readObject();
+        System.out.println("--->>read complete");
 
-        byte []bytes=new byte[1024*5];
-       int length=is.read(bytes);
-
-       if(length==0)
-       {
-           System.out.println("null data accepted");
-           System.exit(0);
-       }
-
-        File file = new File("abc.txt");
-        FileOutputStream fos=new FileOutputStream(file);
-        fos.write(bytes,0,length);
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                ProductFrame frame=new ProductFrame(E1.v,is,os);
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setVisible(true);
+            }
+        });
 
 
-        FileInputStream fis=new FileInputStream(file);
-        ObjectInputStream fout=new ObjectInputStream(fis);  //file output object
-
-
-try {
-    E1.v = (Vector<Product>) fout.readObject();
-}catch (Exception e)
-{
-    e.printStackTrace();
-}
-
-        //System.out.println("--->>Vector accepted");
-
-        while(true)
+////////////////////////////
+   /*     while(true)
         {
             System.out.println("\n-------------------------------------");
             System.out.println("--->>Enter option as follows :");
@@ -85,7 +73,7 @@ try {
             }
 
         }
-
+*/
     }
 }
 

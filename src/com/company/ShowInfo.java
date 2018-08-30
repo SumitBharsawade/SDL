@@ -59,7 +59,7 @@ public class ShowInfo {
         boolean flag=false;
         do {
             System.out.println("**************Buying Product***********");
-            System.out.print("\nEnter Product Name  :");
+           System.out.print("\nEnter Product Name  :");
             String name=cin.next();
 
             System.out.print("\nEnter Model Number :");
